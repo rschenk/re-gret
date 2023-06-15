@@ -1,0 +1,418 @@
+meta:
+  engine: "4.0.0"
+  version: 1
+  author: rschenk
+units:
+  # Key spacing
+  kx: cx            # Choc spacing
+  ky: cy
+  # Keycap size
+  capw: 17.5        # MBK keycaps
+  caph: 16.5
+  # Mirroring
+  center_spread: 38 # Distance between inner top keys _on center_
+  master_angle: 20  # Degrees that the halves are angled
+  # Stagger
+  ring_stagger: 8
+  middle_stagger: 5.5
+  index_stagger: -3.375
+  inner_stagger: -2.375
+  # Splay
+  ring_splay: 7     # Between pinky and ring
+  middle_splay: 4   # Between ring and middle
+  # Thumb cluster
+  thumb_shift_x: 0
+  thumb_shift_y: -ky
+  thumb_splay: 7
+
+  # Outlines
+  edge_border: 2    # Border around PCB, outside the keycaps' perimeter
+  outer_kx: capw + 2edge_border
+  outer_ky: caph + 2edge_border
+  # bump the top-center of the mcu cover down to match the master angle
+  cover_bump_top: -4
+  cover_bump_bottom: -9 # ditto on bottom
+  cover_hole_margin: 3  # Inset from the edge
+  mounting_hole_r: 1
+  standoff_clearance_hole_r: 2.75
+
+  # Laser cutting
+  kerf: 0.006 * 25.4 # Inches
+
+points:
+
+  zones.matrix:
+    # Fix placement on KiCAD sheet
+    anchor:
+      shift: [100, -100]
+    mirror: &mirror
+      ref: matrix_inner_top
+      distance: center_spread
+    rotate: -master_angle
+    key:
+      padding: ky
+      spread: kx
+      tags: [key]
+    columns:
+      pinky:
+        key:
+          splay: ring_splay + middle_splay
+          column_net: C0
+        rows:
+          top.bind: [0, 5, 0, 0]
+          home.bind: 0
+          bottom.bind: 0
+      ring:
+        key:
+          stagger: ring_stagger
+          splay: -ring_splay
+          origin: [-kx/2, -ky/2]
+          column_net: C1
+        rows:
+          top.bind: 0
+          home.bind: 0
+          # Make the bottom of the plate cleaner
+          bottom.bind: [0, 40, 0, 0]
+      middle:
+        key:
+          stagger: middle_stagger
+          splay: -middle_splay
+          origin: [-kx/2, -ky/2]
+          column_net: C2
+      index:
+        key:
+          stagger: index_stagger
+          column_net: C3
+      inner:
+        key:
+          stagger: inner_stagger
+          column_net: C4
+    rows:
+      bottom:
+        row_net: R2
+        mirror.row_net: R6
+      home:
+        row_net: R1
+        mirror.row_net: R5
+      top:
+        row_net: R0
+        mirror.row_net: R4
+
+  zones.thumbs:
+    mirror: *mirror
+    anchor:
+      ref: matrix_inner_bottom
+      shift: [thumb_shift_x, thumb_shift_y]
+    key:
+      padding: ky
+      spread: kx
+      tags: [key]
+    columns:
+      home:
+        key:
+          splay: -thumb_splay
+          origin: [-kx/2, kx/2]
+          column_net: C3
+      reachy:
+        key:
+          splay: -thumb_splay
+          origin: [-kx/2, -kx/2]
+          column_net: C4
+    rows:
+      thumb:
+        row_net: R3
+        mirror.row_net: R7
+
+  zones.mcu_cover_mounting_hole_top:
+    mirror: *mirror
+    anchor:
+      ref: matrix_inner_home
+      shift: [capw/2 + cover_hole_margin, -caph/2 + cover_hole_margin]
+    key.tags: [mcu_cover_mounting_hole]
+
+  zones.mcu_cover_mounting_hole_bottom:
+    $extends: points.zones.mcu_cover_mounting_hole_top
+    anchor:
+      ref: matrix_inner_bottom
+      shift: [capw/2 + cover_hole_margin, -caph/2 + cover_hole_margin]
+
+  zones.mounting_hole_ring_top:
+    mirror: *mirror
+    anchor:
+      ref: matrix_ring_top
+      shift: [-10.1, -ky/2]
+    key.tags: [mounting_hole]
+
+  zones.mounting_hole_ring_bottom:
+    $extends: points.zones.mounting_hole_ring_top
+    anchor:
+      ref: matrix_ring_home
+      shift: [-9.5, -ky/2]
+
+  zones.mounting_hole_index_top:
+    $extends: points.zones.mounting_hole_ring_top
+    anchor:
+      ref: matrix_index_top
+      shift: [8.5, -ky/2]
+
+  zones.mounting_hole_thumb:
+    $extends: points.zones.mounting_hole_ring_top
+    anchor:
+      ref.aggregate.parts: [thumbs_home_thumb, thumbs_reachy_thumb]
+      shift: [0, 0.3]
+
+  zones.led_1:
+    anchor:
+      ref: matrix_middle_top
+      shift: [kx/2 - 2, -5]
+    key:
+      tags: [led]
+      din: led
+      dout: L2
+
+  zones.led_2:
+    $extends: points.zones.led_1
+    anchor:
+      ref: matrix_pinky_top
+      shift: [3.5, -5]
+    key:
+      din: L2
+      dout: L3
+
+  zones.led_3:
+    $extends: points.zones.led_1
+    anchor:
+      ref: matrix_pinky_home
+      shift: [3, -5.5]
+    key:
+      din: L3
+      dout: L4
+
+  zones.led_4:
+    $extends: points.zones.led_1
+    anchor:
+      ref: matrix_middle_bottom
+      shift: [kx/2 - 2, -7]
+    key:
+      din: L4
+      dout: L5
+
+  zones.led_5:
+    $extends: points.zones.led_1
+    anchor:
+      ref: matrix_inner_bottom
+      shift: [5, -9]
+    key:
+      din: L5
+      dout: L6
+
+  zones.led_6:
+    $extends: points.zones.led_1
+    anchor:
+      ref.aggregate.parts: [thumbs_reachy_thumb, mirror_thumbs_reachy_thumb]
+      shift: [0, 3]
+    key:
+      din: L6
+      dout: L7
+
+  zones.led_7:
+    $extends: points.zones.led_5
+    anchor.ref: mirror_matrix_inner_bottom
+    key:
+      din: L7
+      dout: L8
+
+  zones.led_8:
+    $extends: points.zones.led_4
+    anchor.ref: mirror_matrix_middle_bottom
+    key:
+      din: L8
+      dout: L9
+
+  zones.led_9:
+    $extends: points.zones.led_3
+    anchor.ref: mirror_matrix_pinky_home
+    key:
+      din: L9
+      dout: L10
+
+  zones.led_10:
+    $extends: points.zones.led_2
+    anchor.ref: mirror_matrix_pinky_top
+    key:
+      din: L10
+      dout: L11
+
+  zones.led_11:
+    $extends: points.zones.led_1
+    anchor.ref: mirror_matrix_middle_top
+    key:
+      din: L11
+      dout: ''
+
+outlines:
+  raw:
+    - what: rectangle
+      where: key
+      size: [outer_kx, outer_ky]
+      bound: true
+  _center_glue:
+    - what: polygon
+      operation: add
+      points:
+        - ref: matrix_inner_home
+          shift: [kx/2, ky/2]
+        - ref: mirror_matrix_inner_home
+          shift: [kx/2, ky/2]
+        - ref: mirror_thumbs_home_thumb
+          shift: [0, 0]
+        - ref: mirror_thumbs_reachy_thumb
+          shift: [outer_kx/2, -outer_ky/2]
+        - ref.aggregate.parts: [thumbs_reachy_thumb, mirror_thumbs_reachy_thumb]
+          shift: [0, -outer_ky/2]
+        - ref: thumbs_reachy_thumb
+          shift: [outer_kx/2, -outer_ky/2]
+        - ref: thumbs_home_thumb
+          shift: [0, 0]
+  keycaps:
+    - what: rectangle
+      where: key
+      size: [capw, caph]
+  switch_holes:
+    - what: rectangle
+      where: key
+      size: [14 - kerf, 14 - kerf]
+  top_plate:
+    - name: raw
+    - name: switch_holes
+      operation: subtract
+  all_mounting_holes:
+    - what: circle
+      where: [mounting_hole, mcu_cover_mounting_hole]
+      radius: mounting_hole_r
+  mcu_cover:
+    - what: polygon
+      points:
+        - ref: matrix_inner_home
+          shift: [(kx + kx - capw)/2, caph/2]
+        - ref.aggregate.parts:
+          - ref: matrix_inner_home
+            shift: [(kx + kx - capw)/2, caph/2]
+          - ref: mirror_matrix_inner_home
+            shift: [(kx + kx - capw)/2, caph/2]
+          shift: [0, cover_bump_top]
+        - ref: mirror_matrix_inner_home
+          shift: [(kx + kx - capw)/2, caph/2]
+        - ref: mirror_matrix_inner_bottom
+          shift: [(kx + kx - capw)/2, -caph/2]
+        - ref.aggregate.parts:
+          - ref: matrix_inner_bottom
+            shift: [(kx + kx - capw)/2, -caph/2]
+          - ref: mirror_matrix_inner_bottom
+            shift: [(kx + kx - capw)/2, -caph/2]
+          shift: [0, cover_bump_bottom]
+        - ref: matrix_inner_bottom
+          shift: [(kx + kx - capw)/2, -caph/2]
+    - what: circle
+      where: mcu_cover_mounting_hole
+      operation: stack
+      radius: mounting_hole_r
+  board:
+    - name: raw
+    - name: _center_glue
+  comp:
+    - name: board
+    - name: switch_holes
+      operation: stack
+    #- name: keycaps
+    #  operation: stack
+    - name: all_mounting_holes
+      operation: stack
+
+pcbs:
+  regret:
+    outlines:
+      main:
+        outline: board
+    footprints:
+      choc_hotswap:
+        what: choc
+        where: key
+        params:
+          from: "{{row_net}}"
+          to: "{{colrow}}"
+          keycaps: true
+          reverse: false
+          hotswap: true
+
+      diodes:
+        what: better_diode
+        where: key
+        params:
+          from: "{{colrow}}"
+          to: "{{column_net}}"
+          through_hole: false
+          front: true
+          back: false
+          via_from: false
+          via_to: false
+        adjust:
+          shift: [0, -4.7]
+
+      seeed_xiao:
+        what: seeed_xiao
+        where:
+          ref.aggregate.parts: [matrix_inner_home, mirror_matrix_inner_home]
+          shift: [0, -6.5]
+        params:
+          pogo_pins: true
+          P0: LED
+          P1: C0
+          P2: C1
+          P3: C2
+          P4: C3
+          P5: C4
+          P10: SER
+          P9: RCLK
+          P8: SRCLK
+
+      shift_register:
+        what: shift_register
+        where:
+          ref.aggregate.parts: [matrix_inner_home, mirror_matrix_inner_home]
+          shift: [0, -25]
+          rotate: -90
+        params:
+          side: B
+          QA: R4
+          QB: R5
+          QC: R6
+          QD: R7
+          QE: R3
+          QF: R2
+          QG: R1
+          QH: R0
+          SRCLR: VCC
+          OE: GND
+
+      leds:
+        what: ws2812b
+        where: [led]
+        params:
+          side: B
+          VCC: VUSB
+          din: "{{din}}"
+          dout: "{{dout}}"
+
+
+      mcu_mounting_holes:
+        what: hole_m2
+        where: [mcu_cover_mounting_hole]
+        params:
+          plated: true
+
+      mounting_holes:
+        what: hole_m2
+        where: [mounting_hole]
+
+
