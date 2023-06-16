@@ -2,6 +2,7 @@ meta:
   engine: "4.0.0"
   version: 1
   author: rschenk
+
 units:
   # Key spacing
   kx: cx            # Choc spacing
@@ -163,6 +164,7 @@ points:
       shift: [0, 0.3]
 
   zones.led_1:
+    mirror: *mirror
     anchor:
       ref: matrix_middle_top
       shift: [kx/2 - 2, -5]
@@ -170,6 +172,9 @@ points:
       tags: [led]
       din: led
       dout: L2
+      mirror:
+        din: L11
+        dout: ''
 
   zones.led_2:
     $extends: points.zones.led_1
@@ -179,6 +184,9 @@ points:
     key:
       din: L2
       dout: L3
+      mirror:
+        din: L10
+        dout: L11
 
   zones.led_3:
     $extends: points.zones.led_1
@@ -188,6 +196,9 @@ points:
     key:
       din: L3
       dout: L4
+      mirror:
+        din: L9
+        dout: L10
 
   zones.led_4:
     $extends: points.zones.led_1
@@ -197,6 +208,9 @@ points:
     key:
       din: L4
       dout: L5
+      mirror:
+        din: L8
+        dout: L9
 
   zones.led_5:
     $extends: points.zones.led_1
@@ -206,50 +220,20 @@ points:
     key:
       din: L5
       dout: L6
+      mirror:
+        din: L7
+        dout: L8
 
   zones.led_6:
     $extends: points.zones.led_1
+    mirror: $unset
     anchor:
       ref.aggregate.parts: [thumbs_reachy_thumb, mirror_thumbs_reachy_thumb]
       shift: [0, 3]
     key:
       din: L6
       dout: L7
-
-  zones.led_7:
-    $extends: points.zones.led_5
-    anchor.ref: mirror_matrix_inner_bottom
-    key:
-      din: L7
-      dout: L8
-
-  zones.led_8:
-    $extends: points.zones.led_4
-    anchor.ref: mirror_matrix_middle_bottom
-    key:
-      din: L8
-      dout: L9
-
-  zones.led_9:
-    $extends: points.zones.led_3
-    anchor.ref: mirror_matrix_pinky_home
-    key:
-      din: L9
-      dout: L10
-
-  zones.led_10:
-    $extends: points.zones.led_2
-    anchor.ref: mirror_matrix_pinky_top
-    key:
-      din: L10
-      dout: L11
-
-  zones.led_11:
-    $extends: points.zones.led_1
-    anchor.ref: mirror_matrix_middle_top
-    key:
-      din: L11
-      dout: ''
+      mirror: $unset
 
 outlines:
   raw:
@@ -404,7 +388,6 @@ pcbs:
           VCC: VUSB
           din: "{{din}}"
           dout: "{{dout}}"
-
 
       mcu_mounting_holes:
         what: hole_m2

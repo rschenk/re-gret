@@ -287,18 +287,6 @@
       },
       {
         "netclass": "Default",
-        "pattern": "R3"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "home_thumb"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "reachy_thumb"
-      },
-      {
-        "netclass": "Default",
         "pattern": "R6"
       },
       {
@@ -368,6 +356,18 @@
       {
         "netclass": "Default",
         "pattern": "mirror_inner_top"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "R3"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "home_thumb"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "reachy_thumb"
       },
       {
         "netclass": "Default",
@@ -459,7 +459,15 @@
       },
       {
         "netclass": "Default",
+        "pattern": "L11"
+      },
+      {
+        "netclass": "Default",
         "pattern": "L3"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "L10"
       },
       {
         "netclass": "Default",
@@ -467,7 +475,15 @@
       },
       {
         "netclass": "Default",
+        "pattern": "L9"
+      },
+      {
+        "netclass": "Default",
         "pattern": "L5"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "L8"
       },
       {
         "netclass": "Default",
