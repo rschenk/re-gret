@@ -10,7 +10,7 @@ units:
   capw: 17.5        # MBK keycaps
   caph: 16.5
   # Mirroring
-  center_spread: 38 # Distance between inner top keys _on center_
+  center_spread: capw # Distance between inner top keys
   master_angle: 20  # Degrees that the halves are angled
   # Stagger
   ring_stagger: 8
@@ -48,6 +48,7 @@ points:
     mirror: &mirror
       ref: matrix_inner_top
       distance: center_spread
+      shift: [capw/2, caph/2]
     rotate: -master_angle
     key:
       padding: ky
