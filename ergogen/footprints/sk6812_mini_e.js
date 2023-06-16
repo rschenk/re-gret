@@ -30,6 +30,7 @@ module.exports = {
       ${p.at /* parametric position */}
 
       (fp_text reference "${p.ref}" (at ${def_pos}0 2.1 ${p.rot} unlocked) (layer ${p.side}.SilkS)
+        ${p.ref_hide} 
         (effects (font (size 0.7 0.7) (thickness 0.15)) ${p.side == 'F' ? '' : '(justify mirror)'})
       )
 
