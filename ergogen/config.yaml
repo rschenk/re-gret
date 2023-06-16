@@ -403,7 +403,7 @@ pcbs:
           shift: [0, 3]
 
       leds:
-        what: ws2812b
+        what: sk6812_mini_e
         where: [led]
         params:
           side: B

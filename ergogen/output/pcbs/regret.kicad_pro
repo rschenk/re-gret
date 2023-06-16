@@ -451,6 +451,10 @@
       },
       {
         "netclass": "Default",
+        "pattern": "led_1_v"
+      },
+      {
+        "netclass": "Default",
         "pattern": "led"
       },
       {
