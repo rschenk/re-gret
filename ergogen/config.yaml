@@ -41,7 +41,6 @@ units:
   kerf: 0.006 * 25.4 # Inches
 
 points:
-
   zones.matrix:
     # Fix placement on KiCAD sheet
     anchor:
@@ -163,6 +162,8 @@ points:
       ref.aggregate.parts: [thumbs_home_thumb, thumbs_reachy_thumb]
       shift: [0, 0.3]
 
+  # First LED is a "sacrificial" one to allow 3v3 logic to control a 5v LED.
+  # See: https://hackaday.com/2017/01/20/cheating-at-5v-ws2812-control-to-use-a-3-3v-data-line/
   zones.led_1:
     mirror: *mirror
     anchor:
@@ -170,9 +171,11 @@ points:
       shift: [kx/2 - 2, -5]
     key:
       tags: [led]
+      VCC: led_1_v
       din: led
       dout: L2
       mirror:
+        VCC: VUSB
         din: L11
         dout: ''
 
@@ -182,6 +185,7 @@ points:
       ref: matrix_pinky_top
       shift: [3.5, -5]
     key:
+      VCC: VUSB
       din: L2
       dout: L3
       mirror:
@@ -189,7 +193,7 @@ points:
         dout: L11
 
   zones.led_3:
-    $extends: points.zones.led_1
+    $extends: points.zones.led_2
     anchor:
       ref: matrix_pinky_home
       shift: [3, -5.5]
@@ -201,7 +205,7 @@ points:
         dout: L10
 
   zones.led_4:
-    $extends: points.zones.led_1
+    $extends: points.zones.led_2
     anchor:
       ref: matrix_middle_bottom
       shift: [kx/2 - 2, -7]
@@ -213,7 +217,7 @@ points:
         dout: L9
 
   zones.led_5:
-    $extends: points.zones.led_1
+    $extends: points.zones.led_2
     anchor:
       ref: matrix_inner_bottom
       shift: [5, -9]
@@ -225,7 +229,7 @@ points:
         dout: L8
 
   zones.led_6:
-    $extends: points.zones.led_1
+    $extends: points.zones.led_2
     mirror: $unset
     anchor:
       ref.aggregate.parts: [thumbs_reachy_thumb, mirror_thumbs_reachy_thumb]
@@ -330,7 +334,7 @@ pcbs:
           reverse: false
           hotswap: true
 
-      diodes:
+      key_diodes:
         what: better_diode
         where: key
         params:
@@ -380,12 +384,31 @@ pcbs:
           SRCLR: VCC
           OE: GND
 
+      # First LED is a "sacrificial" one to allow 3v3 logic to control a 5v LED.
+      # See: https://hackaday.com/2017/01/20/cheating-at-5v-ws2812-control-to-use-a-3-3v-data-line/
+      led_1_diode:
+        what: better_diode
+        where:
+          ref: matrix_middle_top
+          shift: [kx/2 - 2, -5]
+        params:
+          from: VUSB
+          to: led_1_v
+          through_hole: false
+          front: false
+          back: true
+          via_from: false
+          via_to: false
+        adjust:
+          shift: [0, 3]
+
       leds:
         what: ws2812b
         where: [led]
         params:
           side: B
-          VCC: VUSB
+          facing: B
+          VCC: "{{VCC}}"
           din: "{{din}}"
           dout: "{{dout}}"
 
