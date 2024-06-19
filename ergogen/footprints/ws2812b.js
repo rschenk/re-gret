@@ -16,7 +16,7 @@ module.exports = {
 
     ${p.at /* parametric position */}
 
-    (fp_text reference "${p.ref}" (at 0 -3.7 0) (layer ${p.side}.SilkS)
+    (fp_text reference "${p.ref}" (at 0 -3.7 ${p.rot}) (layer ${p.side}.SilkS)
       (effects (font (size 1 1) (thickness 0.2)) ${ p.side == 'F' ? '' : '(justify mirror)'})
     )
     (fp_text value VAL** (at 0 4.8) (layer ${p.side}.SilkS) hide

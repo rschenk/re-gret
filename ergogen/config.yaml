@@ -37,6 +37,12 @@ units:
   mounting_hole_r: 1
   standoff_clearance_hole_r: 2.75
 
+  # Components
+  xiao_w: 17.5
+  xiao_h: 21
+  bat_plug_w: 7.6
+  bat_plug_h: 5.9
+
   # Laser cutting
   kerf: 0.006 * 25.4 # Inches
 
@@ -220,7 +226,7 @@ points:
     $extends: points.zones.led_2
     anchor:
       ref: matrix_inner_bottom
-      shift: [5, -9]
+      shift: [5, -7]
     key:
       din: L5
       dout: L6
@@ -311,11 +317,13 @@ outlines:
     - name: _center_glue
   comp:
     - name: board
-    - name: switch_holes
+    # - name: switch_holes
+    #   operation: stack
+    - name: keycaps
       operation: stack
-    #- name: keycaps
-    #  operation: stack
     - name: all_mounting_holes
+      operation: stack
+    - name: mcu_cover
       operation: stack
 
 pcbs:
@@ -330,9 +338,18 @@ pcbs:
         params:
           from: "{{row_net}}"
           to: "{{colrow}}"
-          keycaps: true
+          keycaps: false
           reverse: false
           hotswap: true
+
+      choc_bonus_goodies:
+        what: choc_bonus_goodies
+        where: key
+        params:
+          corner_feet: false
+          outline: true
+          hotswap_silk_screen: true
+          bottom_plate_cutout: true
 
       key_diodes:
         what: better_diode
@@ -352,7 +369,7 @@ pcbs:
         what: seeed_xiao
         where:
           ref.aggregate.parts: [matrix_inner_home, mirror_matrix_inner_home]
-          shift: [0, -6.5]
+          shift: [0, -7.5]
         params:
           pogo_pins: true
           P0: LED
@@ -390,7 +407,7 @@ pcbs:
         what: better_diode
         where:
           ref: matrix_middle_top
-          shift: [kx/2 - 2, -5]
+          shift: [kx/2 + 1, -3]
         params:
           from: VUSB
           to: led_1_v
@@ -403,14 +420,43 @@ pcbs:
           shift: [0, 3]
 
       leds:
-        what: sk6812_mini_e
+        what: ws2812b
         where: [led]
         params:
           side: B
-          facing: B
           VCC: "{{VCC}}"
           din: "{{din}}"
           dout: "{{dout}}"
+
+      power_sw:
+        what: slider
+        where.$extends: pcbs.regret.footprints.seeed_xiao.where
+        adjust.shift: [-0.5, xiao_h/2]
+        params:
+          side: B
+          from: "BAT+"
+          to: BAT_POS
+
+      battery:
+        what: jstph
+        where:
+          $extends: pcbs.regret.footprints.seeed_xiao.where
+          rotate: 90
+        adjust.shift: [-xiao_h/2 - bat_plug_h/2 - 0.5, xiao_w/2 + 0.5]
+        params:
+          pos: BAT_POS
+          neg: GND
+
+      reset_button:
+        what: button_side_push
+        where:
+          ref: mirror_matrix_inner_top
+          shift: [outer_kx/2 - 2.1, outer_ky/2 - 4]
+          rotate: -90
+        params:
+          side: B
+          from: RST
+          to: GND
 
       mcu_mounting_holes:
         what: hole_m2

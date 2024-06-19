@@ -1,0 +1,15 @@
+Laser cutting settings for Glowforge Pro
+
+1/16" Acrylic:
+Speed: 241
+Power: Full
+
+To engrave the footpad wells:
+Speed: 544
+Power: 60
+LPI: 270
+
+Silicone Gasket:
+Speed: 204
+Power: 75
+
