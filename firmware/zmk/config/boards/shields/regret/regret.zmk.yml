@@ -1,0 +1,8 @@
+file_format: "1"
+id: regret
+name: Re-gret
+type: shield
+url: https://github.com/rschenk/regret
+requires: [seeed_xiao]
+features:
+  - keys
