@@ -29,16 +29,21 @@ Be advised that right now the underglow only works on the XIAO nRF52840 board, a
 | Board                 | Chip     | USB Wired          | Bluetooth Wireless | RGB Underglow      | Comments                                                     |
 | --------------------- | -------- | ------------------ | ------------------ | ------------------ | ------------------------------------------------------------ |
 | XIAO                  | SAMD21   | :white_check_mark: | :x:                | :x:                | Should work but untested                                     |
-| Adafruit Qt PY        | SAMD21   | :white_check_mark: | :x:                | :x:                | Should work but untested                                     |
 | XIAO BLE              | nRF52840 | :white_check_mark: | :white_check_mark: | :white_check_mark: |                                                              |
 | XIAO RP2040           | RP2040   | :white_check_mark: | :x:                | :x: for now        | Underglow [maybe someday](https://github.com/zmkfirmware/zmk/issues/1085) |
-| Adafruit Qt PY RP2040 | RP2040   | :white_check_mark: | :x:                | :x: for now        | Should work but untested                                     |
 
 ### QMK
 
-I have not written QMK firmware yet, but maybe I will for the RP2040.
+Copy the contents of `firmware/qmk/keyboards/re_gret` into `[your_qmk_firmware]/keyboards/re_gret`, since I have not put the Re-gret firmware into the official QMK repo.
+
+Only the XIAO RP2040 is supported. The Adafruit QT Py RP2040 might possibly work but I don't think the reset button will function.
+
+| Board                 | Chip     | USB Wired          | RGB Underglow      | Comments                                                     |
+| --------------------- | -------- | ------------------ | ------------------ | ------------------------------------------------------------ |
+| XIAO RP2040           | RP2040   | :white_check_mark: | :white_check_mark: |  |
 
 ## Related
 
 * I cribbed the Xiao footprint, pogo pin idea, and battery from the [revxlp](https://gitlab.com/lpgalaxy/revxlp)
+* I based the QMK shift register matrix code on [Sadek's](https://github.com/sadekbaroudi/qmk_firmware)
 * My original 36 key [Egret](https://github.com/rschenk/egret) was the starting point
