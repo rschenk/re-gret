@@ -1,7 +1,22 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/rgb.h>
 
 / {
+    combos {
+        compatible = "zmk,combos";
+        /* Top corners (Q+P) = bootloader */
+        combo_boot {
+            key-positions = <0 9>;
+            bindings = <&bootloader>;
+        };
+        /* Bottom corners (Z+/) = RGB toggle */
+        combo_rgb_tog {
+            key-positions = <20 29>;
+            bindings = <&rgb_ug RGB_TOG>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
