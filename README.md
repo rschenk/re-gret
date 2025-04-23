@@ -16,13 +16,15 @@ Check the docs for a [PCB Build Guide](docs/pcb_build_guide.md) and [Case Build 
 
 ## RGB Underglow
 
-I powered the RGB underglow directly from the USB 5v, so it will automagically turn itself off when in wireless bluetooth mode. There's no need for ZMK's [External Power Control](https://zmk.dev/docs/behaviors/power#external-power-control) because you physically can't run the LEDs from battery power even if you wanted to. There's a [clever trick](https://hackaday.com/2017/01/20/cheating-at-5v-ws2812-control-to-use-a-3-3v-data-line/) using a diode that allows the 5v LEDs to be controlled by the Xiao's 3.3v logic. 
+I powered the RGB underglow directly from the USB 5v, so it will automagically turn itself off when in wireless bluetooth mode. There's no need for ZMK's [External Power Control](https://zmk.dev/docs/behaviors/power#external-power-control) because you physically can't run the LEDs from battery power even if you wanted to. There's a [clever trick](https://hackaday.com/2017/01/20/cheating-at-5v-ws2812-control-to-use-a-3-3v-data-line/) using a diode that allows the 5v LEDs to be controlled by the Xiao's 3.3v logic.
 
 ## Firmware
 
 ### ZMK
 
-Copy the contents of `firmware/zmk/config/boards/shields/regret/` into `[your-zmk-config]/config/boards/shields/regret/`
+I've published the firmware for Re-gret as a ZMK module: [rschenk/zmk-keyboard-re-gret](https://github.com/rschenk/zmk-keyboard-re-gret), which is (probably?) the preferred method for adding the keyboard in ZMK.
+
+If you don't use modules, or prefer the old school way, then copy the contents of `firmware/zmk/config/boards/shields/regret/` into `[your-zmk-config]/config/boards/shields/regret/`
 
 Be advised that right now the underglow only works on the XIAO nRF52840 board, and does not work on the XIAO RP2040 (although it [might in the future](https://github.com/zmkfirmware/zmk/issues/1085)). The original XIAO SAMD21 should work but I haven't tested it.
 
